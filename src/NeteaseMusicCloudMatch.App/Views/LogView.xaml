@@ -1,0 +1,143 @@
+<UserControl x:Class="NeteaseMusicCloudMatch.App.Views.LogView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:services="clr-namespace:NeteaseMusicCloudMatch.App.Services">
+    <Grid Margin="32,24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid Margin="0,0,0,16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <StackPanel>
+                <TextBlock Text="操作日志" FontSize="24" FontWeight="SemiBold" />
+                <TextBlock Text="{Binding StatusMessage}" Foreground="{DynamicResource SecondaryTextBrush}" Margin="0,5,0,0" />
+            </StackPanel>
+            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                <ui:Button Content="刷新" Command="{Binding RefreshCommand}" Appearance="Primary" Margin="0,0,8,0" />
+                <ui:Button Content="清除日志" Command="{Binding ClearLogsCommand}" Appearance="Danger" Margin="0,0,8,0" />
+                <ui:Button Content="打开日志文件夹" Command="{Binding OpenLogDirectoryCommand}" Appearance="Secondary" />
+            </StackPanel>
+        </Grid>
+
+        <Border Grid.Row="1" Style="{StaticResource CardBorder}" Padding="8">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <ItemsControl ItemsSource="{Binding Entries}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Expander HorizontalContentAlignment="Stretch"
+                                      IsExpanded="{Binding IsExpanded, Mode=OneTime}"
+                                      Margin="2">
+                                <Expander.Header>
+                                    <Grid Margin="4,2" MinHeight="48">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="36" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <Border x:Name="SeverityBadge"
+                                                Width="26" Height="26"
+                                                CornerRadius="13"
+                                                Background="{DynamicResource SelectionBrush}"
+                                                VerticalAlignment="Center">
+                                            <TextBlock x:Name="SeverityGlyph"
+                                                       Text="·"
+                                                       Foreground="{DynamicResource AccentBrush}"
+                                                       FontSize="16"
+                                                       FontWeight="Bold"
+                                                       HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center" />
+                                        </Border>
+
+                                        <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="4,0,12,0">
+                                            <TextBlock Text="{Binding Title}" FontWeight="SemiBold" />
+                                            <TextBlock Text="{Binding Summary}" Foreground="{DynamicResource SecondaryTextBrush}" FontSize="11" Margin="0,3,0,0" TextTrimming="CharacterEllipsis" />
+                                        </StackPanel>
+
+                                        <TextBlock Grid.Column="2"
+                                                   Text="{Binding TimeText}"
+                                                   Foreground="{DynamicResource SecondaryTextBrush}"
+                                                   FontSize="11"
+                                                   VerticalAlignment="Center"
+                                                   Margin="8,0" />
+                                    </Grid>
+                                </Expander.Header>
+                                <StackPanel Margin="40,0,8,10">
+                                    <Border Background="{DynamicResource SurfaceAltBrush}" CornerRadius="9" Padding="12,9">
+                                        <TextBlock Text="{Binding TechnicalDetails}"
+                                                   Foreground="{DynamicResource SecondaryTextBrush}"
+                                                   FontFamily="Consolas"
+                                                   FontSize="11"
+                                                   TextWrapping="Wrap" />
+                                    </Border>
+
+                                    <StackPanel Margin="0,10,0,0">
+                                        <StackPanel.Style>
+                                            <Style TargetType="StackPanel">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding HasResponseJson}" Value="True">
+                                                        <Setter Property="Visibility" Value="Visible" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </StackPanel.Style>
+                                        <Grid Margin="2,0,2,7">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="接口响应 JSON" FontWeight="SemiBold" />
+                                            <TextBlock Grid.Column="1" Text="已脱敏 · 超长数组会省略"
+                                                       Foreground="{DynamicResource SecondaryTextBrush}" FontSize="10" />
+                                        </Grid>
+                                        <Border Background="{DynamicResource ElevatedSurfaceBrush}"
+                                                BorderBrush="{DynamicResource BorderBrush}"
+                                                BorderThickness="1"
+                                                CornerRadius="9" Padding="4">
+                                            <TextBox Text="{Binding ResponseJson}"
+                                                     IsReadOnly="True"
+                                                     AcceptsReturn="True"
+                                                     TextWrapping="NoWrap"
+                                                     BorderThickness="0"
+                                                     Background="Transparent"
+                                                     FontFamily="Consolas"
+                                                     FontSize="11"
+                                                     Padding="9,7"
+                                                     MaxHeight="320"
+                                                     VerticalScrollBarVisibility="Auto"
+                                                     HorizontalScrollBarVisibility="Auto" />
+                                        </Border>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Expander>
+                                <DataTemplate.Triggers>
+                                    <DataTrigger Binding="{Binding Severity}" Value="{x:Static services:ApplicationLogSeverity.Information}">
+                                        <Setter TargetName="SeverityGlyph" Property="Text" Value="✓" />
+                                        <Setter TargetName="SeverityGlyph" Property="Foreground" Value="{DynamicResource SuccessBrush}" />
+                                        <Setter TargetName="SeverityBadge" Property="Background" Value="{DynamicResource SuccessBackgroundBrush}" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Severity}" Value="{x:Static services:ApplicationLogSeverity.Warning}">
+                                        <Setter TargetName="SeverityGlyph" Property="Text" Value="!" />
+                                        <Setter TargetName="SeverityGlyph" Property="Foreground" Value="{DynamicResource WarningBrush}" />
+                                        <Setter TargetName="SeverityBadge" Property="Background" Value="{DynamicResource WarningBackgroundBrush}" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Severity}" Value="{x:Static services:ApplicationLogSeverity.Error}">
+                                        <Setter TargetName="SeverityGlyph" Property="Text" Value="×" />
+                                        <Setter TargetName="SeverityGlyph" Property="Foreground" Value="{DynamicResource DangerBrush}" />
+                                        <Setter TargetName="SeverityBadge" Property="Background" Value="{DynamicResource DangerBackgroundBrush}" />
+                                    </DataTrigger>
+                                </DataTemplate.Triggers>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Border>
+    </Grid>
+</UserControl>

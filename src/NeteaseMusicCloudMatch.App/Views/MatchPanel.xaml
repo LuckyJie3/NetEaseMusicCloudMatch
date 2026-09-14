@@ -1,0 +1,129 @@
+<UserControl x:Class="NeteaseMusicCloudMatch.App.Views.MatchPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml">
+    <Border Style="{StaticResource CardBorder}" Padding="20">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel>
+                    <TextBlock Text="匹配信息" FontSize="18" FontWeight="SemiBold" />
+                    <TextBlock Text="先预览，再修改关联" Foreground="{DynamicResource SecondaryTextBrush}" FontSize="10" Margin="0,4,0,0" />
+                </StackPanel>
+                <Border Grid.Column="1" Background="{DynamicResource AccentSoftBrush}" CornerRadius="10"
+                        Padding="9,4" VerticalAlignment="Top">
+                    <TextBlock Text="单曲" Foreground="{DynamicResource AccentBrush}" FontSize="10" FontWeight="SemiBold" />
+                </Border>
+            </Grid>
+
+            <Border Grid.Row="1" Background="{DynamicResource SurfaceAltBrush}" CornerRadius="13" Padding="13" Margin="0,18,0,0">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="58" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Border Width="54" Height="54" CornerRadius="10" Background="{DynamicResource NavigationSurfaceBrush}" ClipToBounds="True">
+                        <Image Source="{Binding SelectedCloudSong.ArtworkUrl}" Stretch="UniformToFill" />
+                    </Border>
+                    <StackPanel Grid.Column="1" Margin="11,0,0,0" VerticalAlignment="Center">
+                        <TextBlock Text="{Binding SelectedCloudSong.Name, TargetNullValue=请选择云盘歌曲}"
+                                   FontWeight="SemiBold" TextTrimming="CharacterEllipsis" />
+                        <TextBlock Text="{Binding SelectedCloudSong.Artists, TargetNullValue=从左侧列表选择一项}"
+                                   Foreground="{DynamicResource SecondaryTextBrush}" FontSize="10"
+                                   TextTrimming="CharacterEllipsis" Margin="0,4,0,0" />
+                        <TextBlock Text="{Binding SelectedCloudSong.Album, TargetNullValue=—}"
+                                   Foreground="{DynamicResource SecondaryTextBrush}" FontSize="10"
+                                   TextTrimming="CharacterEllipsis" Margin="0,2,0,0" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <Grid Grid.Row="2" Margin="2,12,2,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <StackPanel>
+                    <TextBlock Text="云盘 ID" Foreground="{DynamicResource SecondaryTextBrush}" FontSize="9" />
+                    <TextBlock Text="{Binding SelectedCloudSong.SongId, TargetNullValue=—}" FontFamily="Consolas" FontSize="11" Margin="0,3,0,0" />
+                </StackPanel>
+                <StackPanel Grid.Column="1">
+                    <TextBlock Text="当前关联" Foreground="{DynamicResource SecondaryTextBrush}" FontSize="9" />
+                    <TextBlock Text="{Binding SelectedCloudSong.CurrentMatch, TargetNullValue=—}" FontFamily="Consolas" FontSize="11" Margin="0,3,0,0" />
+                </StackPanel>
+            </Grid>
+
+            <StackPanel Grid.Row="3" Margin="0,22,0,0">
+                <TextBlock Text="目标歌曲" FontWeight="SemiBold" />
+                <TextBlock Text="网易云歌曲 ID 或单曲链接" Foreground="{DynamicResource SecondaryTextBrush}" FontSize="10" Margin="0,3,0,8" />
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBox Text="{Binding TargetInput, UpdateSourceTrigger=PropertyChanged}"
+                             ToolTip="例如 186137 或 music.163.com/song?id=186137"
+                             Padding="11,8" />
+                    <ui:Button Grid.Column="1" Content="预览" Command="{Binding PreviewTargetCommand}"
+                               Appearance="Secondary" Margin="8,0,0,0" />
+                </Grid>
+            </StackPanel>
+
+            <StackPanel Grid.Row="4" Margin="0,14,0,0">
+                <Border Background="{DynamicResource AccentSoftBrush}" CornerRadius="13" Padding="13">
+                    <Border.Style>
+                        <Style TargetType="Border">
+                            <Setter Property="Visibility" Value="Visible" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding TargetPreview}" Value="{x:Null}">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="48" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Border Width="44" Height="44" CornerRadius="9" Background="{DynamicResource SurfaceAltBrush}" ClipToBounds="True">
+                            <Image Source="{Binding TargetPreview.ArtworkUrl}" Stretch="UniformToFill" />
+                        </Border>
+                        <StackPanel Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Center">
+                            <TextBlock Text="{Binding TargetPreview.Name}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" />
+                            <TextBlock Text="{Binding TargetPreview.Artists}" Foreground="{DynamicResource SecondaryTextBrush}"
+                                       FontSize="10" TextTrimming="CharacterEllipsis" Margin="0,3,0,0" />
+                            <TextBlock Foreground="{DynamicResource SecondaryTextBrush}" FontSize="9" TextTrimming="CharacterEllipsis" Margin="0,2,0,0">
+                                <Run Text="{Binding TargetPreview.Album}" />
+                                <Run Text="  ·  ID " />
+                                <Run Text="{Binding TargetPreview.SongId}" />
+                            </TextBlock>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+                <TextBlock Text="{Binding StatusMessage}" TextWrapping="Wrap"
+                           Foreground="{DynamicResource SecondaryTextBrush}" FontSize="10" Margin="2,11,2,0" />
+            </StackPanel>
+
+            <StackPanel Grid.Row="5" Margin="0,18,0,0">
+                <ui:Button Content="确认匹配" Command="{Binding ConfirmMatchCommand}" Appearance="Primary"
+                           HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Padding="12,9" />
+                <ui:Button Content="取消当前关联" Command="{Binding CancelMatchCommand}" Appearance="Transparent"
+                           Foreground="{DynamicResource DangerBrush}"
+                           HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Margin="0,6,0,0" />
+            </StackPanel>
+        </Grid>
+    </Border>
+</UserControl>
