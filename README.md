@@ -60,6 +60,7 @@ NeteaseMusicCloudMatch 是一个非官方 Windows 桌面工具，用来纠正当
 4. 刷新网页或点击页面内容，可选择 **Fetch/XHR** 缩小请求范围。
 5. 在请求列表中选择一个发往 `music.163.com` 的已登录请求，打开 **Headers（标头）**。
 6. 在 **Request Headers（请求标头）** 中找到 `Cookie`，只复制冒号后面的完整值，不要包含 `Cookie:` 字样。
+    ![复制Cookie](./docs/images/copyCookie.png)
 7. 回到软件，把 Cookie 粘贴到多行输入框。
 8. 按需勾选“记住登录状态”，再点击“Cookie 登录”。
 
