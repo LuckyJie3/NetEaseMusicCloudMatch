@@ -8,6 +8,29 @@ NeteaseMusicCloudMatch 是一个非官方 Windows 桌面工具，用来纠正当
 
 它不是音乐下载器，不下载歌曲，不破解 VIP，也不绕过付费或版权限制。应用只调用网易云音乐网页使用过的私有接口；这些接口没有稳定性承诺，未来可能变化。
 
+## 界面预览
+
+以下截图由项目内置的离线预览器生成，使用的是演示账号与虚构歌曲数据，不包含真实 Cookie、UID 或用户日志。
+
+<table>
+  <tr>
+    <th>Cookie 登录</th>
+    <th>云盘列表与单曲匹配</th>
+  </tr>
+  <tr>
+    <td><img src="docs/images/login.png" alt="Cookie 登录页面" /></td>
+    <td><img src="docs/images/cloud-match.png" alt="云盘列表与匹配页面" /></td>
+  </tr>
+  <tr>
+    <th>操作日志</th>
+    <th>设置与项目信息</th>
+  </tr>
+  <tr>
+    <td><img src="docs/images/logs.png" alt="操作日志页面" /></td>
+    <td><img src="docs/images/settings.png" alt="设置与项目信息页面" /></td>
+  </tr>
+</table>
+
 ## 功能
 
 - 使用从网易云音乐网页版手工复制的完整 Cookie 登录；
@@ -34,16 +57,18 @@ NeteaseMusicCloudMatch 是一个非官方 Windows 桌面工具，用来纠正当
 1. 启动软件，点击“打开网易云音乐网页版”。
 2. 在浏览器中自行登录网易云音乐。
 3. 按 `F12` 打开开发者工具，进入 **Network（网络）**。
-4. 刷新网页或点击页面内容，在请求列表中选择一个发往 `music.163.com` 的已登录请求。
-5. 在 **Request Headers（请求标头）** 中找到 `Cookie`，复制其完整值。
-6. 回到软件，把完整 Cookie 粘贴到多行输入框。
-7. 按需勾选“记住登录状态”，再点击“登录”。
+4. 刷新网页或点击页面内容，可选择 **Fetch/XHR** 缩小请求范围。
+5. 在请求列表中选择一个发往 `music.163.com` 的已登录请求，打开 **Headers（标头）**。
+6. 在 **Request Headers（请求标头）** 中找到 `Cookie`，只复制冒号后面的完整值，不要包含 `Cookie:` 字样。
+7. 回到软件，把 Cookie 粘贴到多行输入框。
+8. 按需勾选“记住登录状态”，再点击“Cookie 登录”。
 
 如果账号接口没有返回有效 profile，软件会提示：
 
 > Cookie 无效或已过期，请重新登录网易云网页版后复制新的 Cookie。
 
-不要把 Cookie 发给任何人，也不要把真实 Cookie 写入 issue、日志、截图、源码、`appsettings.json` 或命令行参数。
+> [!CAUTION]
+> Cookie 等同于账号登录凭证。不要把 Cookie 发给任何人，也不要把真实 Cookie 写入 Issue、日志、截图、源码、`appsettings.json` 或命令行参数。截图 DevTools 前必须完全遮住 Cookie；如果怀疑 Cookie 已经泄露，请立即在网易云音乐退出登录并重新登录以刷新会话。
 
 ## 如何查找歌曲 ID
 
@@ -106,6 +131,14 @@ userId       = 当前登录账号 UID
 ```
 
 “操作日志”页可以展开查看格式化后的响应 JSON，也可以通过“清除日志”按钮清空滚动日志文件。清除日志不会删除 `session.dat`，也不会修改云盘歌曲。
+
+## 操作日志
+
+- 最新操作显示在最前，可以快速区分成功、警告和错误；
+- 点击一条记录可以展开 Endpoint、HTTP 状态、网易云业务 code、CorrelationId 和接口响应 JSON；
+- JSON 在写入日志前会脱敏并限制大小，超长数组和深层对象会省略；
+- 应用启动、主题切换等本地事件没有接口响应 JSON，属于正常情况；
+- “清除日志”会先要求确认，清除后仍会继续记录新的脱敏日志。
 
 ## FAQ
 
