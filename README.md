@@ -54,9 +54,9 @@ NeteaseMusicCloudMatch 是一个非官方 Windows 桌面工具，用来纠正当
 
 ## 下载
 
-前往 [GitHub Releases](https://github.com/LuckyJie3/NetEaseMusicCloudMatch/releases/latest) 下载最新的 `win-x64` 压缩包，解压后运行 `NeteaseMusicCloudMatch.App.exe`。
+前往 [GitHub Releases](https://github.com/LuckyJie3/NetEaseMusicCloudMatch/releases/latest)，可选择直接下载独立的 `win-x64.exe`，或下载 `win-x64.zip` 后解压运行。
 
-发布包为 Windows x64 自包含版本，不需要预先安装 .NET SDK。下载后可以使用 Release 中提供的 `SHA256SUMS.txt` 校验文件完整性。
+两种发布形式均为 Windows x64 自包含版本，不需要预先安装 .NET SDK，也不依赖外置 `appsettings.json`。下载后可以使用 Release 中提供的 `SHA256SUMS.txt` 校验文件完整性。
 
 ## Cookie 登录教程
 
