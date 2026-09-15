@@ -52,6 +52,12 @@ NeteaseMusicCloudMatch 是一个非官方 Windows 桌面工具，用来纠正当
 - 推荐使用项目发布的 self-contained 版本，普通用户不需要安装 .NET SDK；
 - 源码构建需要 .NET 10 SDK。
 
+## 下载
+
+前往 [GitHub Releases](https://github.com/LuckyJie3/NetEaseMusicCloudMatch/releases/latest) 下载最新的 `win-x64` 压缩包，解压后运行 `NeteaseMusicCloudMatch.App.exe`。
+
+发布包为 Windows x64 自包含版本，不需要预先安装 .NET SDK。下载后可以使用 Release 中提供的 `SHA256SUMS.txt` 校验文件完整性。
+
 ## Cookie 登录教程
 
 1. 启动软件，点击“打开网易云音乐网页版”。
